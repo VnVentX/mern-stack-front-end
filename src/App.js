@@ -15,7 +15,7 @@ export default class App extends Component {
 
   retrieveData = async () => {
     await axios
-      .get("https://prm391-react-native.herokuapp.com/user/")
+      .get("https://anhtt-mern-stack-server.herokuapp.com/user/")
       .then(res => {
         const user = res.data;
         this.setState({ user });
@@ -38,7 +38,7 @@ export default class App extends Component {
     let id = currentUser._id;
     let username = currentUser.username;
     axios
-      .delete("https://prm391-react-native.herokuapp.com/user/" + id)
+      .delete("https://anhtt-mern-stack-server.herokuapp.com/user" + id)
       .then(res => {
         this.retrieveData();
         console.log("Deleted user: " + username);
@@ -73,7 +73,7 @@ export default class App extends Component {
       };
       axios
         .patch(
-          "https://prm391-react-native.herokuapp.com/user/" + detail.id,
+          "https://anhtt-mern-stack-server.herokuapp.com/user/" + detail.id,
           updateValue
         )
         .then(res => {
@@ -89,7 +89,7 @@ export default class App extends Component {
       });
     } else {
       axios
-        .post("https://prm391-react-native.herokuapp.com/user/", detail)
+        .post("https://anhtt-mern-stack-server.herokuapp.com/user/", detail)
         .then(res => {
           console.log(res);
           console.log(`Updated user ${detail.username}`);
