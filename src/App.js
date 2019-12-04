@@ -1,24 +1,25 @@
 import React, { Component } from "react";
 import axios from "axios";
-import DataList from "./DataList";
-import InputForm from "./InputForm";
+import DataList from "./components/DataList";
+import InputForm from "./components/InputForm";
 import "./App.css";
-
-const LOCATION = window.location.href;
 
 export default class App extends Component {
   state = {
     user: [],
     username: "",
     description: "",
-    id: ""
+    id: "",
+    isEdditing: false
   };
 
   retrieveData = async () => {
-    await axios.get(LOCATION + "user/").then(res => {
-      const user = res.data;
-      this.setState({ user });
-    });
+    await axios
+      .get("https://prm391-react-native.herokuapp.com/user/")
+      .then(res => {
+        const user = res.data;
+        this.setState({ user });
+      });
   };
 
   componentDidMount() {
@@ -37,7 +38,7 @@ export default class App extends Component {
     let id = currentUser._id;
     let username = currentUser.username;
     axios
-      .delete("http://localhost:4000/user/" + id)
+      .delete("https://prm391-react-native.herokuapp.com/user/" + id)
       .then(res => {
         this.retrieveData();
         console.log("Deleted user: " + username);
@@ -52,7 +53,8 @@ export default class App extends Component {
     this.setState({
       username,
       description,
-      id
+      id,
+      isEdditing: true
     });
   }
 
@@ -64,13 +66,16 @@ export default class App extends Component {
       id: this.state.id
     };
     console.log(detail);
-    if (detail.id) {
+    if (this.state.isEdditing) {
       const updateValue = {
         username: this.state.username,
         description: this.state.description
       };
       axios
-        .patch("http://localhost:4000/user/" + detail.id, updateValue)
+        .patch(
+          "https://prm391-react-native.herokuapp.com/user/" + detail.id,
+          updateValue
+        )
         .then(res => {
           console.log(res);
           console.log(`Edited user ${updateValue.username}`);
@@ -79,14 +84,17 @@ export default class App extends Component {
       this.setState({
         username: "",
         description: "",
-        id: ""
+        id: "",
+        isEdditing: false
       });
     } else {
-      axios.post("http://localhost:4000/user/", detail).then(res => {
-        console.log(res);
-        console.log(`Updated user ${detail.username}`);
-        this.retrieveData();
-      });
+      axios
+        .post("https://prm391-react-native.herokuapp.com/user/", detail)
+        .then(res => {
+          console.log(res);
+          console.log(`Updated user ${detail.username}`);
+          this.retrieveData();
+        });
       this.setState({
         username: "",
         description: ""
@@ -94,7 +102,7 @@ export default class App extends Component {
     }
   };
 
-  todoList() {
+  userList = () => {
     return this.state.user.map((currentUser, i) => {
       return (
         <DataList
@@ -110,13 +118,13 @@ export default class App extends Component {
         />
       );
     });
-  }
+  };
 
   render() {
     return (
       <div>
-        {this.todoList().length > 0 ? (
-          this.todoList()
+        {this.userList().length > 0 ? (
+          this.userList()
         ) : (
           <h1>This List is currently empty!!!</h1>
         )}
@@ -126,9 +134,8 @@ export default class App extends Component {
           username={this.state.username}
           handleDescriptionChange={this.handleDescriptionChange}
           description={this.state.description}
-          id={this.state.id}
           onSubmit={this.onSubmit}
-          idEdditing={this.state.isEdditing}
+          isEdditing={this.state.isEdditing}
         />
       </div>
     );

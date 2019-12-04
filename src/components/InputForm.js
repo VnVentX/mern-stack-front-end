@@ -26,7 +26,11 @@ export default class InputForm extends Component {
           readOnly={true}
           hidden={true}
         />
-        <button type="submit">Add</button>
+        {this.props.isEdditing ? (
+          <button type="submit">Edit</button>
+        ) : (
+          <button type="submit">Add</button>
+        )}
       </form>
     );
   }
