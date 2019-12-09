@@ -20,12 +20,6 @@ export default class InputForm extends Component {
             onChange={this.props.handleDescriptionChange}
           />
         </label>
-        <input
-          type="text"
-          value={this.props.id}
-          readOnly={true}
-          hidden={true}
-        />
         {this.props.isEdditing ? (
           <button type="submit">Edit</button>
         ) : (

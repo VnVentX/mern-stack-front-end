@@ -38,7 +38,7 @@ export default class App extends Component {
     let id = currentUser._id;
     let username = currentUser.username;
     axios
-      .delete("https://anhtt-mern-stack-server.herokuapp.com/user" + id)
+      .delete("https://anhtt-mern-stack-server.herokuapp.com/user/" + id)
       .then(res => {
         this.retrieveData();
         console.log("Deleted user: " + username);
